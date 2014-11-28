@@ -1,0 +1,6 @@
+{
+	"name" : "SeeingSpaceAPI",
+	"dependencies": {
+		"xmlhttprequest" : "1.6.0"
+	}
+}
