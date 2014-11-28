@@ -1,14 +1,30 @@
 <head>
-  <title>seeingspaces</title>
+  <meta charset="utf-8">
+  <title>Seeing Space - #w00tcamp 2014</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="http://fonts.googleapis.com/css?family=RobotoDraft:regular,bold,medium" rel="stylesheet" type="text/css">
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
-
-  {{> hello}}
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name="controlSurface">
+  <div id="screens">
+    {{#each screen}}
+    <div class="screen"><iframe src="/screen{{.}}"></iframe></div>
+    {{/each}}
+  </div>
+</template>
+
+<template name="screen1">
+  <h1>Screen 1</h1>
+</template>
+<template name="screen2">
+  <h1>Screen 2</h1>
+</template>
+<template name="screen3">
+  <h1>Screen 3</h1>
+</template>
+<template name="screen4">
+  <h1>Screen 4</h1>
 </template>
