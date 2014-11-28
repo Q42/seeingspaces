@@ -1,8 +1,5 @@
 <head>
-  <meta charset="utf-8">
-  <title>Seeing Space - #w00tcamp 2014</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link href="http://fonts.googleapis.com/css?family=RobotoDraft:regular,bold,medium" rel="stylesheet" type="text/css">
+  <title>seeingspaces</title>
 </head>
 
 <body>
@@ -27,4 +24,39 @@
 </template>
 <template name="screen4">
   <h1>Screen 4</h1>
+</template>
+
+<template name="remote1">
+  <h1>Remote 1</h1>
+  <form class="new-run">
+    <input type="text" name="text" class="form-control input-lg" placeholder="Test run #1" /><br />
+  </form>
+</template>
+
+<template name="remote2">
+  <h1>Remote 2</h1>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <h2>Tijdbalk</h2>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <h2>Runs</h2>
+      <table class="table table-hover">
+        <tbody>
+          {{#each runs}}
+            {{> run}}
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<template name="run">
+  <tr class="{{#if maybeActive}}active{{/if}}">
+    <td>{{text}}</td>
+    <td>{{createdAt}}</td>
+  </tr>
 </template>
