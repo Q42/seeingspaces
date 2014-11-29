@@ -3,6 +3,7 @@
 </head>
 
 <body>
+
 </body>
 
 <template name="controlSurface">
@@ -28,18 +29,31 @@
 
 <template name="remote1">
   <h1>Remote 1</h1>
-  <form class="new-run">
-    <input type="text" name="text" class="form-control input-lg" placeholder="Test run #1" /><br />
+  <form role="form" class="new-run">
+    <div class="form-group">
+      <input type="text" name="text" class="form-control input-lg" placeholder="Test run #1" />
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn btn-danger">New Run</button>
+    </div>
   </form>
 </template>
 
 <template name="remote2">
   <h1>Remote 2</h1>
+  <!--
   <div class="panel panel-default">
     <div class="panel-body">
       <h2>Tijdbalk</h2>
+      {{currentTimestamp}}
+      <input type="range" class="currentTime" min="{{startTime}}" max="{{endTime}}" value="{{currentTime}}">
+      <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="{{currentTime}}" aria-valuemin="{{startTime}}" aria-valuemax="{{endTime}}" style="width: {{percentage}}%;">{{prettyTime}}</div>
+      </div>
     </div>
   </div>
+  -->
   <div class="panel panel-default">
     <div class="panel-body">
       <h2>Runs</h2>
@@ -55,8 +69,8 @@
 </template>
 
 <template name="run">
-  <tr class="{{#if maybeActive}}active{{/if}}">
+  <tr class="{{#if maybeActive}}info{{/if}}">
     <td>{{text}}</td>
-    <td>{{createdAt}}</td>
+    <td>{{createdAt}} ({{timestamp}})</td>
   </tr>
 </template>
