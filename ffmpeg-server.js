@@ -3,6 +3,17 @@ var exec = require('child_process').exec
 var elasticsearch = require('elasticsearch');
 var child = null
 
+var args = process.argv.slice(2)
+if (args.length == 0) {
+  console.log('Usage: node ffmpeg-server.js <port> <camera-name> <video-path> <stream-url>');
+  console.log('Example: node ffmpeg-server.js 3000 marvin-top ./video http://127.0.0.1:8082/secret')
+  return;
+}
+
+var argPort = parseInt(args[0])
+var argCamera = args[1];
+var argVideoPath = args[2];
+var argStreamUrl = args[3];
 var esClient = new elasticsearch.Client({
   host: 'w00tcamp-es.local:9200',
   log: 'info'
@@ -13,8 +24,6 @@ app.get('/', function (req, res) {
 
   var offset = (req.query.offset || "0").toHHMMSS()
 
-  
-  var camera = req.query.camera || "overview"
   var timestamp = req.query.timestamp
 
   var epochTimestamp = Date.parse(timestamp)
@@ -23,7 +32,7 @@ app.get('/', function (req, res) {
     return;
   }
 
-  findLatestVideo(camera, timestamp).then(function (resp) {
+  findLatestVideo(argCamera, timestamp).then(function (resp) {
     var hits = resp.hits.hits;
     var hit = hits.length > 0 ? hits[0] : null;
 
@@ -39,7 +48,7 @@ app.get('/', function (req, res) {
       }
 
       console.log('starting playback for "' + filename + '" at ' + offset + ' with resolution ' + width + 'x' + height)
-      child = exec('ffmpeg -re -ss ' + offset + ' -i video/' + filename + ' -f mpeg1video http://127.0.0.1:8082/mrvulcan/' + width + '/' + height,
+      child = exec('ffmpeg -re -ss ' + offset + ' -i ' + argVideoPath + '/' + filename + ' -f mpeg1video ' + argStreamUrl + '/' + width + '/' + height,
         function (error, stdout, stderr) {})
     } else {
       console.warn("no video found")
@@ -51,7 +60,7 @@ app.get('/', function (req, res) {
   res.send('Acknowledged!')
 })
 
-var server = app.listen(3000, function () {
+var server = app.listen(argPort, function () {
 
   var host = server.address().address
   var port = server.address().port
