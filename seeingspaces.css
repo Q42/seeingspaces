@@ -2,40 +2,40 @@
 
 body {
 	padding: 20px;
-  font-family: "Myriad Set Pro","Lucida Grande","Helvetica Neue","Helvetica","Arial","Verdana","sans-serif";
-  background: black;
-  color: white;
-  margin: 0px;
+  -font-family: "Myriad Set Pro","Lucida Grande","Helvetica Neue","Helvetica","Arial","Verdana","sans-serif";
+  -background: black;
+  -color: white;
+  -margin: 0px;
 }
 
-h1 {
+.screen h1 {
   font-weight: 200;
   font-size: 60px;
   margin: 0;
   margin-bottom: 10px;
 }
 
-h2 {
+.screen h2 {
   font-weight: 200;
   font-size: 20px;
   margin: 0;
   margin-bottom: 10px;
 }
 
-.box {
+.screen .box {
   box-sizing: border-box;
 }
 
-iframe {
+.screen iframe {
   border: 0;
   margin-bottom: 10px;
 }
 
-.video-container {
+.screen .video-container {
   position: relative;
 }
 
-.video-title {
+.screen .video-title {
   margin-top: -20px;
   display: block;
   z-index: 10;

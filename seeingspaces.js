@@ -1,8 +1,20 @@
 Router.route("/", function() { this.render("controlSurface") }, { fastRender: true });
 Router.route("/screen:num", function() { this.render("screen" + this.params.num) }, { fastRender: true });
 Router.route("/remote:num", function() { this.render("remote" + this.params.num) }, { fastRender: true });
+Router.route('/log', {where: 'server'})
+  .get(function() {
+    this.response.end('get request\n');
+  })
+  .post(function() {
+    var data = null;
+    for (x in this.request.body) { data = JSON.parse(x); }
+    console.log(data);
+    log(data.clientName, data.logName, data.json);
+    this.response.end('post request\n');
+  });
 
 InMemory = new Mongo.Collection("inMemory");
+Logs = new Mongo.Collection("logs");
 Runs = new Mongo.Collection("runs");
 
 if (Meteor.isClient) {
