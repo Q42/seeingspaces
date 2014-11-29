@@ -7,13 +7,11 @@ Runs = new Mongo.Collection("runs");
 
 if (Meteor.isClient) {
 
-  Meteor.subscribe('runs_ready', function(){
-    var active = Session.get("active");
-    var newest = getNewest();
+  moment.locale('nl-NL');
 
-    if (active == null && newest) {
-      Session.set("active", newest._id);
-    }
+  Meteor.subscribe('runs_ready', function() {
+    var newest = getNewest();
+    Session.set("active", newest);
   });
 
   Template.remote1.events({
@@ -27,57 +25,99 @@ if (Meteor.isClient) {
   });
 
   Template.remote2.helpers({
-
-    currentTimestamp: function() {
-      return Session.get("timestamp")
-    },
-    runs: function () {
+    runs: function() {
       return Runs.find({}, {sort: {createdAt: -1}});
     },
-    startTime: function() {
-      var currentRun = Runs.findOne(Session.get("active"));
-      return currentRun.createdAt.getTime();
+    maybeNewest: function() {
+      return isNewest();
     },
-    endTime: function() {
-      var currentRun = Runs.findOne(Session.get("active"));
-      var startTime = currentRun.createdAt.getTime();
-      var nextRun = Runs.findOne({createdAt: {$gt: new Date(startTime)}}, {sort: {createdAt: 1}});
-      return nextRun.createdAt.getTime();
+    start: function() {
+      return getStart();
     },
-    prettyTime: function() {
-      return moment(currentTime).format('H:mm:ss');
+    end: function() {
+      return getEnd();
     },
-    percentage: function() {
-      return 0;
+    current: function() {
+      return Session.get("timestamp");
+    },
+    prettyCurrent: function() {
+      return isNewest()
+        ? "LIVE"
+        : moment(parseInt(Session.get("timestamp")) * 1000).format('dd H:mm:ss');
     }
   });
+
+  Template.remote2.events({
+    "click tr": function() {
+      Session.set("active", this);
+      Session.set("timestamp", toSeconds(this.createdAt));
+
+      clearTimeout(timeout);
+      if (!isNewest()) play();
+    }
+  });
+
+  function toSeconds(datetime) {
+    return Math.floor(datetime.getTime() / 1000);
+  }
+
+  function isNewest() {
+    var active = Session.get("active");
+    var newest = getNewest();
+    if (active == null || newest == null) return;
+
+    return active._id == newest._id;
+  }
 
   function getNewest() {
     return Runs.findOne({}, {sort: {createdAt: -1}});
   }
 
-  Template.remote2.events({
-    "click tr": function() {
-      if (getNewest()._id == this._id) console.log('laatste');
-      Session.set("active", this._id);
-      //Session.set("timestamp", getStartTimestamp(this._id));
-    },
-    "change .currentTime": function() {
-      //console.log(currentTime);
-    }
-  });
+  function getNext() {
+    var current = Runs.findOne(Session.get("active"));
+    if (current == null) return;
+
+    var next = Runs.findOne({createdAt: {$gt: current.createdAt}}, {sort: {createdAt: 1}});
+    return next;
+  }
+
+  function getStart() {
+    var current = Session.get("active");
+    if (current == null) return;
+
+    return toSeconds(current.createdAt);
+  }
+
+  function getEnd() {
+    var next = getNext();
+    if (next == null) return;
+
+    return toSeconds(next.createdAt);
+  }
+
+  var timeout;
+  function play() {
+    timeout = setTimeout(function() {
+      Session.set("timestamp", 1 + Session.get("timestamp"));
+      if (Session.get("timestamp") >= getEnd()) {
+        Session.set("active", getNext());
+      }
+      play();
+    }, 1000);
+  }
 
   Template.run.helpers({
     createdAt: function() {
-      moment.locale('nl-NL');
       return moment(this.createdAt).format('dd H:mm:ss');
     },
     timestamp: function() {
-      return this.createdAt.getTime();
+      return toSeconds(this.createdAt);
     },
     maybeActive: function() {
+      var active = Session.get("active");
+      if (active == null) return;
 
-      return Session.get("active") == this._id;
+      return active._id == this._id;
     }
   });
 }

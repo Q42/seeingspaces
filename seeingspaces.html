@@ -41,19 +41,16 @@
 
 <template name="remote2">
   <h1>Remote 2</h1>
-  <!--
   <div class="panel panel-default">
     <div class="panel-body">
-      <h2>Tijdbalk</h2>
-      {{currentTimestamp}}
-      <input type="range" class="currentTime" min="{{startTime}}" max="{{endTime}}" value="{{currentTime}}">
-      <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-      <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="{{currentTime}}" aria-valuemin="{{startTime}}" aria-valuemax="{{endTime}}" style="width: {{percentage}}%;">{{prettyTime}}</div>
-      </div>
+      <h2>{{prettyCurrent}}</h2>
+      {{#if maybeNewest}}
+      <input type="range" disabled="disabled" min="0" max="1" value="1" />
+      {{else}}
+      <input type="range" id="timeline" disabled="disabled" min="{{start}}" max="{{end}}" value="{{current}}" />
+      {{/if}}
     </div>
   </div>
-  -->
   <div class="panel panel-default">
     <div class="panel-body">
       <h2>Runs</h2>
