@@ -1,6 +1,0 @@
-{
-  "dependencies" : {
-    "express": "4.10.4",
-    "elasticsearch": "3.0.0"
-  }
-}
