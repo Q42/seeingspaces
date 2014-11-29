@@ -38,6 +38,9 @@
 
 <template name="screen3">
   <h1>Screen 3</h1>
+  {{#each logs}}
+  {{> log}}
+  {{/each}}
 </template>
 
 <template name="screen4">
@@ -87,4 +90,8 @@
     <td>{{text}}</td>
     <td>{{createdAt}} ({{timestamp}})</td>
   </tr>
+</template>
+
+<template name="log">
+  {{value}}
 </template>

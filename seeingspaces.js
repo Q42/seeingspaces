@@ -3,6 +3,7 @@ Router.route("/screen:num", function() { this.render("screen" + this.params.num)
 Router.route("/remote:num", function() { this.render("remote" + this.params.num) }, { fastRender: true });
 Router.route('/log', {where: 'server'})
   .get(function() {
+    Logs.insert({value: this.request.query.log, createdAt: new Date() });
     this.response.end('get request\n');
   })
   .post(function() {
@@ -25,6 +26,12 @@ if (Meteor.isClient) {
     var newest = getNewest();
     Session.set("active", newest);
   });
+
+  Template.screen3.helpers({
+      logs: function() {
+        return Logs.find({}, {sort: {createdAt: -1}, limit: 10});
+      }
+  })
 
   Template.remote1.events({
     "submit .new-run": function (event) {
